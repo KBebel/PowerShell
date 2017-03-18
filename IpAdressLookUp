@@ -1,0 +1,13 @@
+Clear
+$ErrorActionPreference = ‚silentlycontinue’
+Remove-Variable [a..z]* -Scope Global
+Remove-Variable [1..9]* -Scope Global
+#$ScriptPath = $MyInvocation.MyCommand.Path
+#$Dir = Split-Path $ScriptPath
+#Push-Location $Dir
+
+$net = ipconfig
+$testIfwireless = $False
+$found = $False
+foreach ($_ In $test3) {$1 = $_.ToString(); if ($1.Contains("Wirele")){$testIfwireless = $True}; if ($testIfwireless -eq $true -And $found -eq $False) {if ($1.Contains("IPv4")) {$found=$true; $IpWirelessAdress = $1}}}
+$IpWirelessAdress = $IpWirelessAdress.Replace("   IPv4 Address. . . . . . . . . . . : ","")
