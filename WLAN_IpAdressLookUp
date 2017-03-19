@@ -9,5 +9,6 @@ Remove-Variable [1..9]* -Scope Global
 $net = ipconfig
 $testIfwireless = $False
 $found = $False
-foreach ($_ In $test3) {$1 = $_.ToString(); if ($1.Contains("Wirele")){$testIfwireless = $True}; if ($testIfwireless -eq $true -And $found -eq $False) {if ($1.Contains("IPv4")) {$found=$true; $IpWirelessAdress = $1}}}
+foreach ($_ In $net) {$1 = $_.ToString(); if ($1.Contains("Wirele")){$testIfwireless = $True}; if ($testIfwireless -eq $true -And $found -eq $False) {if ($1.Contains("IPv4")) {$found=$true; $IpWirelessAdress = $1}}}
 $IpWirelessAdress = $IpWirelessAdress.Replace("   IPv4 Address. . . . . . . . . . . : ","")
+Write-Host IP Adress is $IpWirelessAdress
