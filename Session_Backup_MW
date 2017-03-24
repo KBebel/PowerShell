@@ -3,7 +3,11 @@ cd D:\DATATRANSFER\_Backup\
     foreach ($dir in Get-ChildItem -Directory) {
     & cd D:\DATATRANSFER\_Backup\$dir
         foreach ($file in Get-ChildItem *.session) {
-            Rename-Item -Path $file.Name -NewName ($file.Name -replace '\.session',$file.LastWriteTime.ToString(".yyyyMMdd_hhmm")) 
+            
+            #add (test if .format exists) IF $file -match '\..*" {do code ver1} else {(just add) $file.LastWriteTime.ToString(".yyyyMMdd_hhmm"))}
+            
+            Rename-Item -Path $file.Name -NewName ($file.Name -replace '\..*',$file.LastWriteTime.ToString(".yyyyMMdd_hhmm")) 
         }
     }
 }
+
