@@ -1,13 +1,31 @@
-cd D:\DATATRANSFER\_Backup\
+#Declaration of Variables
+$SourceFolder = 'D:\DATATRANSFER\'
+$BackupFolder = 'D:\DATATRANSFER\_Backup\'
+$Ships = '0696','0700'
+
+for ($i=0;$i -lt $Ships.Count; $i++)
+{
+    Get-ChildItem "$($SourceFolder)$($Ships[$i])_Synchro\R$($Ships[$i])SE\" |
+    Where-Object {$_.LastWriteTime -ge (Get-Date).AddDays(-3)} |
+    Copy-Item -Destination "$($BackupFolder)\R$($Ships[$i])SE" -Recurse
+}
+
+
+cd $BackupFolder
 & {
-    foreach ($dir in Get-ChildItem -Directory) {
-    & cd D:\DATATRANSFER\_Backup\$dir
-        foreach ($file in Get-ChildItem *.session) {
-            
-            #add (test if .format exists) IF $file -match '\..*" {do code ver1} else {(just add) $file.LastWriteTime.ToString(".yyyyMMdd_hhmm"))}
-            
-            Rename-Item -Path $file.Name -NewName ($file.Name -replace '\..*',$file.LastWriteTime.ToString(".yyyyMMdd_hhmm")) 
+    foreach ($dir in Get-ChildItem -Directory) 
+    {
+        & cd $BackupFolder\$dir
+        foreach ($file in Get-ChildItem *.session) 
+        {
+            if ( $file.Name -match '\..*')
+            {
+                Rename-Item -Path $file.Name -NewName ($file.Name -replace '\..*',$file.LastWriteTime.ToString(".yyyyMMdd_hhmm")) -Force
+            }
+            else
+            {
+                Rename-Item $file.Name -NewName ($file.Name + $file.lastwritetime.ToString(".yyyyMMdd_hhmm"))
+            }
         }
     }
 }
-
