@@ -2,10 +2,10 @@
 
 ###############################################################################################
 ##
-## Name of Sctipt
+##  Name of Sctipt
 ##
-## Copyright (C) 2017 - Karol Bebel ANTARES
-## All rights are reserved by Karol Bebel ANTARES and the use without permission is prohibited. 
+##  Copyright (C) 2017 - Karol Bebel ANTARES
+##  All rights are reserved by Karol Bebel ANTARES and the use without permission is prohibited. 
 ##
 ###############################################################################################
 
