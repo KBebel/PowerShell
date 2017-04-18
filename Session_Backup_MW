@@ -1,3 +1,13 @@
+##############################################################################################
+#
+#  R0xxxSE Session Backup v0.3
+#
+#  Copyright (C) 2017 - Karol Bebel ANTARES
+#
+#  All rights are reserved by Karol Bebel ANTARES and the use without permission is prohibited.
+#
+##############################################################################################
+
 #Declaration of Variables
 $SourceFolder = 'D:\DATATRANSFER\'
 $BackupFolder = 'D:\DATATRANSFER\_Backup\'
@@ -5,9 +15,10 @@ $Ships = '0696','0700'
 
 for ($i=0;$i -lt $Ships.Count; $i++)
 {
-    Get-ChildItem "$($SourceFolder)$($Ships[$i])_Synchro\R$($Ships[$i])SE\" |
-    Where-Object {$_.LastWriteTime -ge (Get-Date).AddDays(-3)} |
-    Copy-Item -Destination "$($BackupFolder)\R$($Ships[$i])SE" -Recurse
+        Get-ChildItem "$($SourceFolder)$($Ships[$i])_Synchro\R$($Ships[$i])SE\" |
+        Where-Object {$_.LastWriteTime -ge (Get-Date).AddDays(-3)} |
+        Copy-Item -Destination "$($BackupFolder)\R$($Ships[$i])SE" -Recurse
+#catch {"$($file.name) already exist! will be removed if is also backuped!"}
 }
 
 
@@ -18,14 +29,30 @@ cd $BackupFolder
         & cd $BackupFolder\$dir
         foreach ($file in Get-ChildItem *.session) 
         {
-            if ( $file.Name -match '\..*')
+            try 
             {
-                Rename-Item -Path $file.Name -NewName ($file.Name -replace '\..*',$file.LastWriteTime.ToString(".yyyyMMdd_hhmm")) -Force
+                if ( $file.Name -match '\..*')
+                {
+                    Rename-Item -Path $file.Name -NewName ($file.Name -replace '\..*',$file.LastWriteTime.ToString(".yyyyMMdd_hhmm")) -Force -ErrorAction Stop
+                }
+                else
+                {
+                    Rename-Item $file.Name -NewName ($file.Name + $file.lastwritetime.ToString(".yyyyMMdd_hhmm")) -ErrorAction Stop
+                }
             }
-            else
+            catch 
             {
-                Rename-Item $file.Name -NewName ($file.Name + $file.lastwritetime.ToString(".yyyyMMdd_hhmm"))
+                Remove-Item $file
+                Write-Host "$($file.name) removed (already backuped)"
             }
         }
     }
 }
+
+
+##code to rename file
+
+#Get-ChildItem @@putFile@@ -OutVariable file
+#$fileEnd = $file.basename.Substring(60)
+#$fileStart = $file.basename.Substring(0, $test.basename.length - 21)
+#Rename-Item -Path $file.fullname -NewName ($file.name -replace "$($file.name)" , "$($fileStart)$($file.lastwritetime.ToString("yyyyMMdd_hhmm"))$($fileEnd).session")
